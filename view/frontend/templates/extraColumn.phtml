@@ -1,0 +1,35 @@
+<?php
+    /* @var $block \Magento\Sales\Block\Order\History\Container */
+  ?>
+
+  <td data-th="<?= $block->escapeHtml(__('Products')) ?>" class="col">
+    <?php
+    	$order = $block->getOrder();
+		$products_info = $optionstxt = '';
+		foreach ($order->getAllVisibleItems() as $o_items) {
+			$products_info .= $o_items->getName()."<br/>".$o_items->getSku()."<br/><br/>";
+			
+			if($o_items->getProductOptions()) {
+			$result = [];
+			$options = $o_items->getProductOptions();
+			if ($options) {
+				if (isset($options['options'])) {
+					$result = array_merge($result, $options['options']);
+				}
+				if (isset($options['additional_options'])) {
+					$result = array_merge($result, $options['additional_options']);
+				}
+				if (isset($options['attributes_info'])) {
+					$result = array_merge($result, $options['attributes_info']);
+				}
+			}
+			$optionstxt .= "<dt class='options'>";
+			foreach ($result as $_option) {
+					$optionstxt .= '<dd>'.$_option['label'].'</dd><dd>'.$_option['value'].'</dd>';
+			} 
+			$optionstxt .= '</dt>';
+			}
+	     }
+		 echo $products_info.$optionstxt;
+    ?>
+  </td>
